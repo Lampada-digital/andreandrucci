@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Andre Andrucci — Massagem Estética & Fitness</title>
+    <meta name="description" content="Massagem estética e fitness de alto padrão. Técnicas avançadas que transformam corpos e resultados.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="image/logo.png">
+    <link rel="apple-touch-icon" href="image/logo.png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --black: #0A0A0A;
+            --black-soft: #111111;
+            --charcoal: #1A1A1A;
+            --gold: #D4AF37;
+            --gold-light: #F4E5C2;
+            --gold-dark: #B8941F;
+            --cream: #F5F1E8;
+            --white: #FAFAFA;
+            --gray: #6B6B6B;
+            --gray-light: #A0A0A0;
+            
+            --font-display: 'Instrument Serif', serif;
+            --font-body: 'Inter', sans-serif;
+            --font-impact: 'Bebas Neue', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-body);
+            background: var(--black);
+            color: var(--cream);
+            overflow-x: hidden;
+            cursor: none;
+            font-weight: 300;
+        }
+
+        /* Bloqueia scroll quando menu está aberto */
+        body.menu-open { overflow: hidden; }
+        body.menu-open .cursor,
+        body.menu-open .cursor-ring { display: none !important; }
+
+        ::selection { background: var(--gold); color: var(--black); }
+
+        /* CURSOR */
+        .cursor {
+            width: 8px; height: 8px; background: var(--gold); border-radius: 50%;
+            position: fixed; pointer-events: none; z-index: 9999;
+            transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s;
+        }
+        .cursor-ring {
+            width: 40px; height: 40px; border: 1px solid var(--gold); border-radius: 50%;
+            position: fixed; pointer-events: none; z-index: 9998;
+            transform: translate(-50%, -50%); transition: all 0.4s;
+        }
+        .cursor.hover { width: 60px; height: 60px; background: transparent; }
+        .cursor-ring.hover { width: 80px; height: 80px; }
+
+        /* LOADER */
+        .loader {
+            position: fixed; inset: 0; background: #000000; z-index: 10000;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: opacity 1s ease, visibility 1s ease;
+        }
+        .loader.hidden { opacity: 0; visibility: hidden; }
+        .loader-logo-container {
+            width: 320px; max-width: 80vw; margin-bottom: 2rem;
+            animation: loaderPulse 2.5s ease-in-out infinite;
+        }
+        .loader-logo-container img {
+            width: 100%; height: auto; display: block;
+            filter: drop-shadow(0 0 30px rgba(212, 175, 55, 0.3));
+        }
+        @keyframes loaderPulse {
+            0%, 100% { transform: scale(1); opacity: 0.9; filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.2)); }
+            50% { transform: scale(1.05); opacity: 1; filter: drop-shadow(0 0 40px rgba(212, 175, 55, 0.5)); }
+        }
+        .loader-text {
+            font-family: var(--font-display); font-size: 1.2rem;
+            color: var(--gold); letter-spacing: 0.6rem; text-transform: uppercase;
+            opacity: 0; animation: fadeInText 1s ease 0.5s forwards;
+        }
+        .loader-bar-container {
+            width: 200px; height: 1px; background: var(--charcoal);
+            margin-top: 2rem; position: relative; overflow: hidden;
+            opacity: 0; animation: fadeInText 1s ease 0.8s forwards;
+        }
+        .loader-bar-container::after {
+            content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 0;
+            background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-light));
+            animation: loadBar 2s ease forwards;
+        }
+        @keyframes loadBar { 0% { width: 0; } 100% { width: 100%; } }
+        @keyframes fadeInText { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* NAV LATERAL */
+        .nav-side {
+            position: fixed; left: 3rem; top: 50%; transform: translateY(-50%);
+            z-index: 100; display: flex; flex-direction: column; gap: 2rem;
+        }
+        .nav-side a {
+            writing-mode: vertical-rl; transform: rotate(180deg);
+            color: var(--gray); text-decoration: none; font-size: 0.75rem;
+            letter-spacing: 0.2rem; text-transform: uppercase; transition: all 0.4s;
+        }
+        .nav-side a:hover, .nav-side a.active { color: var(--gold); }
+
+        /* HEADER */
+        .header {
+            position: fixed; top: 0; left: 0; width: 100%; padding: 1.5rem 3rem;
+            display: flex; justify-content: space-between; align-items: center; z-index: 100;
+            background: rgba(10, 10, 10, 0.8); backdrop-filter: blur(10px);
+        }
+        .logo { display: flex; align-items: center; gap: 1rem; text-decoration: none; }
+        .logo-icon { width: 50px; height: 50px; object-fit: contain; transition: transform 0.4s; }
+        .logo:hover .logo-icon { transform: scale(1.1); }
+        .logo-text {
+            font-family: var(--font-display); font-size: 1.3rem;
+            color: var(--gold); letter-spacing: 0.15rem; line-height: 1.1;
+        }
+        .logo-text span {
+            display: block; font-family: var(--font-body); font-size: 0.6rem;
+            letter-spacing: 0.25rem; color: var(--gray-light); margin-top: 0.2rem;
+            text-transform: uppercase;
+        }
+        .menu-toggle {
+            width: 50px; height: 50px; border: 1px solid var(--gold); border-radius: 50%;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            gap: 5px; cursor: pointer; background: transparent; transition: all 0.4s;
+        }
+        .menu-toggle span { width: 20px; height: 2px; background: var(--gold); transition: all 0.4s; }
+        .menu-toggle:hover { background: var(--gold); }
+        .menu-toggle:hover span { background: var(--black); }
+
+        /* MENU FULLSCREEN - CORRIGIDO */
+        .menu-full {
+            position: fixed; inset: 0;
+            background: rgba(10, 10, 10, 0.98);
+            backdrop-filter: blur(20px);
+            z-index: 99;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; visibility: hidden;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        .menu-full.active { opacity: 1; visibility: visible; }
+        .menu-full-content { text-align: center; }
+        .menu-full a {
+            display: block;
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 8vw, 6rem);
+            color: var(--cream);
+            text-decoration: none;
+            margin: 1rem 0;
+            transition: all 0.4s;
+            position: relative;
+            transform: translateY(30px);
+            opacity: 0;
+        }
+        .menu-full.active a {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .menu-full.active a:nth-child(1) { transition-delay: 0.1s; }
+        .menu-full.active a:nth-child(2) { transition-delay: 0.2s; }
+        .menu-full.active a:nth-child(3) { transition-delay: 0.3s; }
+        .menu-full.active a:nth-child(4) { transition-delay: 0.4s; }
+        .menu-full.active a:nth-child(5) { transition-delay: 0.5s; }
+        .menu-full.active a:nth-child(6) { transition-delay: 0.6s; }
+        .menu-full a:hover { color: var(--gold); transform: translateX(20px); }
+        .menu-full a::before {
+            content: attr(data-num); position: absolute; left: -60px; top: 50%;
+            transform: translateY(-50%); font-family: var(--font-body);
+            font-size: 0.8rem; color: var(--gold); letter-spacing: 0.2rem;
+        }
+        .menu-close {
+            position: absolute; top: 2rem; right: 3rem; width: 50px; height: 50px;
+            border: 1px solid var(--gold); border-radius: 50%; background: transparent;
+            color: var(--gold); font-size: 1.2rem; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.4s; z-index: 100;
+        }
+        .menu-close:hover {
+            background: var(--gold); color: var(--black); transform: rotate(90deg);
+        }
+
+        /* HERO */
+        .hero {
+            min-height: 100vh; position: relative; display: flex;
+            align-items: flex-end; padding: 8rem 3rem 4rem; overflow: hidden;
+        }
+        .hero-bg-text {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            font-family: var(--font-impact); font-size: clamp(15rem, 30vw, 35rem);
+            color: transparent; -webkit-text-stroke: 1px rgba(212, 175, 55, 0.15);
+            letter-spacing: -0.02em; line-height: 0.85; z-index: 0;
+            pointer-events: none; white-space: nowrap;
+        }
+        .hero-content {
+            position: relative; z-index: 2; width: 100%;
+            display: grid; grid-template-columns: 1.2fr 1fr; gap: 4rem; align-items: end;
+        }
+        .hero-title {
+            font-family: var(--font-display); font-size: clamp(4rem, 10vw, 10rem);
+            line-height: 0.9; color: var(--cream);
+        }
+        .hero-title .italic { font-style: italic; color: var(--gold); }
+        .hero-title .line { display: block; overflow: hidden; }
+        .hero-title .line span {
+            display: inline-block; animation: slideUp 1.2s forwards; transform: translateY(100%);
+        }
+        .hero-title .line:nth-child(2) span { animation-delay: 0.2s; }
+        .hero-title .line:nth-child(3) span { animation-delay: 0.4s; }
+        @keyframes slideUp { to { transform: translateY(0); } }
+
+        .hero-side { display: flex; flex-direction: column; gap: 2rem; padding-bottom: 2rem; }
+        .hero-image {
+            position: relative; width: 100%; aspect-ratio: 3/4;
+            overflow: hidden; border: 1px solid var(--gold); background: var(--charcoal);
+        }
+        .hero-image img { width: 100%; height: 100%; object-fit: cover; transition: all 1s; }
+        .hero-image:hover img { transform: scale(1.05); }
+        .hero-meta {
+            display: flex; justify-content: space-between; align-items: flex-end;
+            padding-top: 1rem; border-top: 1px solid var(--charcoal);
+        }
+        .hero-meta-item { font-size: 0.75rem; letter-spacing: 0.15rem; text-transform: uppercase; }
+        .hero-meta-item .label { color: var(--gray); margin-bottom: 0.3rem; }
+        .hero-meta-item .value { color: var(--gold); font-family: var(--font-display); font-size: 1.1rem; }
+
+        .scroll-indicator {
+            position: absolute; bottom: 3rem; left: 50%; transform: translateX(-50%);
+            display: flex; flex-direction: column; align-items: center; gap: 1rem;
+            color: var(--gray); font-size: 0.7rem; letter-spacing: 0.2rem; text-transform: uppercase;
+        }
+        .scroll-line { width: 1px; height: 60px; background: var(--charcoal); position: relative; overflow: hidden; }
+        .scroll-line::after {
+            content: ''; position: absolute; top: -100%; left: 0; width: 100%; height: 50%;
+            background: var(--gold); animation: scrollDown 2s ease infinite;
+        }
+        @keyframes scrollDown { 0% { top: -50%; } 100% { top: 100%; } }
+
+        /* MARQUEE */
+        .marquee {
+            padding: 3rem 0; border-top: 1px solid var(--charcoal);
+            border-bottom: 1px solid var(--charcoal); overflow: hidden; background: var(--black-soft);
+        }
+        .marquee-track {
+            display: flex; gap: 4rem; animation: marquee 30s linear infinite; white-space: nowrap;
+        }
+        .marquee-item {
+            font-family: var(--font-display); font-size: clamp(2rem, 5vw, 4rem);
+            color: var(--cream); display: flex; align-items: center; gap: 4rem; flex-shrink: 0;
+        }
+        .marquee-item .dot { width: 10px; height: 10px; background: var(--gold); border-radius: 50%; }
+        @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+        /* SECTIONS GERAL */
+        section { padding: 10rem 3rem; position: relative; }
+        .about-label {
+            font-size: 0.75rem; letter-spacing: 0.3rem; text-transform: uppercase;
+            color: var(--gold); margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem;
+        }
+        .about-label::before { content: ''; width: 40px; height: 1px; background: var(--gold); }
+
+        /* ABOUT */
+        .about { background: var(--black-soft); }
+        .about-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 6rem;
+            max-width: 1400px; margin: 0 auto; align-items: center;
+        }
+        .about-number {
+            font-family: var(--font-impact); font-size: clamp(8rem, 15vw, 15rem);
+            color: transparent; -webkit-text-stroke: 1px var(--gold); line-height: 1; margin-bottom: 2rem;
+        }
+        .about-title { font-family: var(--font-display); font-size: clamp(2.5rem, 5vw, 4.5rem); line-height: 1; margin-bottom: 2rem; }
+        .about-title .italic { font-style: italic; color: var(--gold); }
+        .about-text { font-size: 1.05rem; line-height: 1.8; color: var(--gray-light); margin-bottom: 1.5rem; }
+        .about-signature {
+            margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--charcoal);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .signature-name { font-family: var(--font-display); font-size: 1.8rem; color: var(--gold); }
+        .signature-role { font-size: 0.75rem; letter-spacing: 0.2rem; text-transform: uppercase; color: var(--gray); }
+
+        /* SERVICES */
+        .services-header {
+            max-width: 1400px; margin: 0 auto 6rem;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: end;
+        }
+        .services-title { font-family: var(--font-display); font-size: clamp(3rem, 6vw, 5rem); line-height: 1; }
+        .services-title .italic { font-style: italic; color: var(--gold); }
+        .services-subtitle {
+            font-size: 1.1rem; color: var(--gray-light); line-height: 1.7;
+            padding-bottom: 1rem; border-bottom: 1px solid var(--charcoal);
+        }
+        .services-list { max-width: 1400px; margin: 0 auto; }
+        .service-item {
+            border-top: 1px solid var(--charcoal); padding: 3rem 0; cursor: pointer;
+            transition: all 0.5s; position: relative; overflow: hidden;
+        }
+        .service-item:last-child { border-bottom: 1px solid var(--charcoal); }
+        .service-item::before {
+            content: ''; position: absolute; left: 0; top: 0; width: 0; height: 100%;
+            background: linear-gradient(90deg, rgba(212,175,55,0.08), transparent); transition: width 0.6s;
+        }
+        .service-item:hover::before { width: 100%; }
+        .service-header {
+            display: grid; grid-template-columns: 80px 1fr auto; gap: 3rem;
+            align-items: center; position: relative; z-index: 1;
+        }
+        .service-num { font-family: var(--font-impact); font-size: 1.5rem; color: var(--gold); }
+        .service-name { font-family: var(--font-display); font-size: clamp(1.8rem, 4vw, 3rem); transition: all 0.4s; }
+        .service-item:hover .service-name { color: var(--gold); font-style: italic; padding-left: 20px; }
+        .service-icon {
+            width: 50px; height: 50px; border: 1px solid var(--charcoal); border-radius: 50%;
+            display: flex; justify-content: center; align-items: center; color: var(--gold); transition: all 0.4s;
+        }
+        .service-item:hover .service-icon {
+            background: var(--gold); color: var(--black); border-color: var(--gold); transform: rotate(360deg);
+        }
+        .service-desc {
+            max-height: 0; overflow: hidden; transition: max-height 0.6s, padding 0.6s;
+            position: relative; z-index: 1; padding-left: 110px;
+        }
+        .service-item.active .service-desc { max-height: 200px; padding-top: 2rem; }
+        .service-desc p { color: var(--gray-light); font-size: 1rem; line-height: 1.7; max-width: 700px; }
+
+        /* NUMBERS */
+        .numbers { padding: 8rem 3rem; background: var(--gold); color: var(--black); position: relative; overflow: hidden; }
+        .numbers::before {
+            content: 'AA'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            font-family: var(--font-impact); font-size: 40rem; color: rgba(10, 10, 10, 0.05);
+        }
+        .numbers-grid {
+            max-width: 1400px; margin: 0 auto; display: grid;
+            grid-template-columns: repeat(4, 1fr); gap: 3rem; position: relative; z-index: 1;
+        }
+        .number-item { text-align: center; padding: 2rem; border-right: 1px solid rgba(10, 10, 10, 0.2); }
+        .number-item:last-child { border-right: none; }
+        .number-value { font-family: var(--font-impact); font-size: clamp(4rem, 8vw, 7rem); line-height: 1; margin-bottom: 1rem; }
+        .number-label { font-size: 0.8rem; letter-spacing: 0.2rem; text-transform: uppercase; font-weight: 500; }
+
+        /* PHILOSOPHY */
+        .philosophy { text-align: center; }
+        .philosophy-content { max-width: 1000px; margin: 0 auto; }
+        .philosophy-quote {
+            font-family: var(--font-display); font-size: clamp(2rem, 5vw, 4rem);
+            font-style: italic; line-height: 1.2; margin-bottom: 4rem;
+        }
+        .philosophy-quote .highlight { color: var(--gold); }
+        .pillars { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-top: 6rem; }
+        .pillar { padding: 3rem 1.5rem; border: 1px solid var(--charcoal); transition: all 0.5s; }
+        .pillar:hover { border-color: var(--gold); transform: translateY(-10px); }
+        .pillar-num { font-family: var(--font-impact); font-size: 3rem; color: var(--gold); margin-bottom: 1rem; }
+        .pillar-name { font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 1rem; }
+        .pillar-desc { font-size: 0.85rem; color: var(--gray-light); line-height: 1.6; }
+
+        /* GALLERY */
+        .gallery { background: var(--black-soft); }
+        .gallery-header { max-width: 1400px; margin: 0 auto 6rem; text-align: center; }
+        .gallery-title { font-family: var(--font-display); font-size: clamp(3rem, 6vw, 5rem); }
+        .gallery-title .italic { font-style: italic; color: var(--gold); }
+        .gallery-grid { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+        .gallery-item { position: relative; aspect-ratio: 3/4; overflow: hidden; cursor: pointer; }
+        .gallery-item:nth-child(2) { margin-top: 4rem; }
+        .gallery-item:nth-child(3) { margin-top: 8rem; }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(40%); transition: all 0.8s; }
+        .gallery-item:hover img { filter: grayscale(0%); transform: scale(1.1); }
+        .gallery-item-overlay {
+            position: absolute; bottom: 0; left: 0; right: 0; padding: 2rem;
+            background: linear-gradient(to top, rgba(10,10,10,0.9), transparent);
+            transform: translateY(100%); transition: transform 0.5s;
+        }
+        .gallery-item:hover .gallery-item-overlay { transform: translateY(0); }
+        .gallery-item-title { font-family: var(--font-display); font-size: 1.5rem; color: var(--gold); }
+
+        /* DEPOIMENTOS */
+        .testimonials { background: var(--black); }
+        .testimonials-grid {
+            max-width: 1400px; margin: 0 auto;
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;
+        }
+        .testimonial-card {
+            background: var(--black-soft); border: 1px solid var(--charcoal);
+            padding: 3rem 2rem; transition: all 0.5s; position: relative;
+        }
+        .testimonial-card:hover { border-color: var(--gold); transform: translateY(-10px); }
+        .testimonial-stars {
+            color: var(--gold); margin-bottom: 1.5rem; font-size: 0.9rem; display: flex; gap: 0.3rem;
+        }
+        .testimonial-text {
+            font-family: var(--font-display); font-size: 1.3rem; font-style: italic;
+            line-height: 1.5; color: var(--cream); margin-bottom: 2rem;
+        }
+        .testimonial-author h4 {
+            font-family: var(--font-body); font-size: 1rem; font-weight: 600;
+            color: var(--gold); margin-bottom: 0.2rem;
+        }
+        .testimonial-author span { font-size: 0.8rem; color: var(--gray-light); letter-spacing: 0.05rem; }
+
+        /* CTA */
+        .cta { text-align: center; position: relative; overflow: hidden; }
+        .cta-bg-logo {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 500px; height: 500px; opacity: 0.08;
+        }
+        .cta-bg-logo img { width: 100%; height: 100%; object-fit: contain; }
+        .cta-content { position: relative; z-index: 1; max-width: 1000px; margin: 0 auto; }
+        .cta-title { font-family: var(--font-display); font-size: clamp(3rem, 8vw, 8rem); line-height: 0.95; margin-bottom: 3rem; }
+        .cta-title .italic { font-style: italic; color: var(--gold); }
+        .cta-btn {
+            display: inline-flex; align-items: center; gap: 1.5rem; background: var(--gold);
+            color: var(--black); padding: 1.5rem 3rem; text-decoration: none;
+            font-size: 0.85rem; font-weight: 600; letter-spacing: 0.2rem;
+            text-transform: uppercase; transition: all 0.4s; border: 1px solid var(--gold);
+        }
+        .cta-btn:hover { background: transparent; color: var(--gold); transform: translateY(-5px); }
+
+        /* CONTACT */
+        .contact { background: var(--black-soft); }
+        .contact-grid { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; }
+        .contact-info h2 { font-family: var(--font-display); font-size: clamp(3rem, 6vw, 5rem); line-height: 1; margin-bottom: 2rem; }
+        .contact-info h2 .italic { font-style: italic; color: var(--gold); }
+        .contact-info > p { font-size: 1.1rem; color: var(--gray-light); line-height: 1.8; margin-bottom: 3rem; }
+        .contact-methods { display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 3rem; }
+        .contact-method {
+            display: flex; align-items: center; gap: 1.5rem; padding: 1.5rem;
+            border: 1px solid var(--charcoal); transition: all 0.4s; text-decoration: none; color: var(--cream);
+        }
+        .contact-method:hover { border-color: var(--gold); background: rgba(212, 175, 55, 0.05); transform: translateX(10px); }
+        .contact-method-icon {
+            width: 50px; height: 50px; background: var(--gold); color: var(--black);
+            display: flex; justify-content: center; align-items: center; font-size: 1.2rem;
+        }
+        .contact-method-info { flex: 1; }
+        .contact-method-label { font-size: 0.7rem; letter-spacing: 0.2rem; text-transform: uppercase; color: var(--gray); margin-bottom: 0.3rem; }
+        .contact-method-value { font-family: var(--font-display); font-size: 1.3rem; }
+        .contact-social { display: flex; gap: 1rem; }
+        .contact-social a {
+            width: 50px; height: 50px; border: 1px solid var(--charcoal);
+            display: flex; justify-content: center; align-items: center;
+            color: var(--cream); text-decoration: none; transition: all 0.4s;
+        }
+        .contact-social a:hover { background: var(--gold); border-color: var(--gold); color: var(--black); transform: translateY(-5px); }
+        .contact-form { padding: 3rem; border: 1px solid var(--charcoal); }
+        .form-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: 2rem; color: var(--gold); }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; font-size: 0.7rem; letter-spacing: 0.2rem; text-transform: uppercase; color: var(--gray); margin-bottom: 0.5rem; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 1rem 0; background: transparent; border: none;
+            border-bottom: 1px solid var(--charcoal); color: var(--cream);
+            font-family: var(--font-body); font-size: 1rem; transition: border-color 0.4s;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-bottom-color: var(--gold); }
+        .form-group select option { background: var(--black); }
+        .form-submit {
+            width: 100%; background: var(--gold); color: var(--black); padding: 1.2rem;
+            border: 1px solid var(--gold); font-family: var(--font-body); font-size: 0.8rem;
+            font-weight: 600; letter-spacing: 0.2rem; text-transform: uppercase;
+            cursor: pointer; transition: all 0.4s; margin-top: 1rem;
+            display: flex; justify-content: center; align-items: center; gap: 1rem;
+        }
+        .form-submit:hover { background: transparent; color: var(--gold); }
+
+        /* FOOTER */
+        .footer { padding: 6rem 3rem 2rem; background: var(--black); border-top: 1px solid var(--charcoal); }
+        .footer-big-text {
+            font-family: var(--font-impact); font-size: clamp(4rem, 15vw, 15rem);
+            color: transparent; -webkit-text-stroke: 1px var(--gold);
+            text-align: center; line-height: 0.9; margin-bottom: 4rem;
+        }
+        .footer-grid { max-width: 1400px; margin: 0 auto 4rem; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem; }
+        .footer-brand .footer-logo { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+        .footer-brand .footer-logo-img {
+            width: 60px; height: 60px; object-fit: contain;
+            filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.3));
+        }
+        .footer-brand .footer-logo-text { font-family: var(--font-display); font-size: 1.3rem; color: var(--gold); }
+        .footer-brand p { color: var(--gray-light); font-size: 0.9rem; line-height: 1.8; max-width: 350px; }
+        .footer-col h4 { font-family: var(--font-display); color: var(--cream); font-size: 1.2rem; margin-bottom: 1.5rem; }
+        .footer-col a { color: var(--gray-light); text-decoration: none; font-size: 0.9rem; line-height: 2.2; display: block; transition: all 0.3s; }
+        .footer-col a:hover { color: var(--gold); padding-left: 10px; }
+        .footer-bottom {
+            border-top: 1px solid var(--charcoal); padding-top: 2rem;
+            display: flex; justify-content: space-between; align-items: center;
+            max-width: 1400px; margin: 0 auto; flex-wrap: wrap; gap: 1rem;
+        }
+        .footer-bottom p { color: var(--gray); font-size: 0.8rem; }
+        .footer-tagline { font-family: var(--font-display); color: var(--gold); font-size: 1rem; }
+
+        /* WHATSAPP FLOAT */
+        .whatsapp-float {
+            position: fixed; bottom: 2rem; right: 2rem; width: 60px; height: 60px;
+            background: #25D366; color: white; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 1.8rem; text-decoration: none; z-index: 999;
+            box-shadow: 0 5px 20px rgba(37, 211, 102, 0.4); transition: all 0.4s;
+            animation: whatsappPulse 2s infinite;
+        }
+        .whatsapp-float:hover { transform: scale(1.1) rotate(10deg); }
+        @keyframes whatsappPulse {
+            0%, 100% { box-shadow: 0 5px 20px rgba(37, 211, 102, 0.4); }
+            50% { box-shadow: 0 5px 30px rgba(37, 211, 102, 0.7); }
+        }
+
+        /* ANIMATIONS */
+        .reveal { opacity: 0; transform: translateY(50px); transition: all 1s; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .nav-side { display: none; }
+            .hero-content, .about-grid, .services-header, .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+            .numbers-grid { grid-template-columns: repeat(2, 1fr); }
+            .number-item { border-right: none; border-bottom: 1px solid rgba(10,10,10,0.2); }
+            .pillars { grid-template-columns: repeat(2, 1fr); }
+            .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+            .gallery-item:nth-child(2), .gallery-item:nth-child(3) { margin-top: 0; }
+            .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+            .service-header { grid-template-columns: 60px 1fr auto; gap: 1.5rem; }
+            .service-desc { padding-left: 60px; }
+        }
+
+        @media (max-width: 768px) {
+            .cursor, .cursor-ring { display: none; }
+            body { cursor: auto; }
+            .header { padding: 1rem 1.5rem; }
+            section { padding: 6rem 1.5rem; }
+            .numbers-grid, .pillars, .testimonials-grid { grid-template-columns: 1fr; }
+            .gallery-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+            .footer-bottom { flex-direction: column; text-align: center; }
+            .service-header { grid-template-columns: 1fr auto; }
+            .service-num { display: none; }
+            .service-desc { padding-left: 0; }
+            .menu-full a::before { display: none; }
+            .loader-logo-container { width: 250px; }
+            .menu-close { top: 1.5rem; right: 1.5rem; }
+        }
+
+        @media (max-width: 480px) {
+            .loader-logo-container { width: 200px; }
+            .hero-title { font-size: clamp(3rem, 12vw, 5rem); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Loader -->
+    <div class="loader" id="loader">
+        <div class="loader-logo-container">
+            <img src="image/logo.png" alt="Andre Andrucci Logo">
+        </div>
+        <div class="loader-text">Andre Andrucci</div>
+        <div class="loader-bar-container"></div>
+    </div>
+
+    <!-- Cursor -->
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-ring" id="cursor-ring"></div>
+
+    <!-- Navegação Lateral -->
+    <nav class="nav-side">
+        <a href="#hero" class="active">Início</a>
+        <a href="#about">Sobre</a>
+        <a href="#services">Serviços</a>
+        <a href="#testimonials">Depoimentos</a>
+        <a href="#contact">Contato</a>
+    </nav>
+
+    <!-- Header -->
+    <header class="header">
+        <a href="#" class="logo">
+            <img src="image/logo.png" alt="Andre Andrucci Logo" class="logo-icon">
+            <div class="logo-text">
+                Andre Andrucci
+                <span>Massagem Estética</span>
+            </div>
+        </a>
+        <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu">
+            <span></span>
+            <span></span>
+        </button>
+    </header>
+
+    <!-- Menu Fullscreen -->
+    <div class="menu-full" id="menu-full">
+        <button class="menu-close" id="menu-close" aria-label="Fechar menu"><i class="fas fa-times"></i></button>
+        <div class="menu-full-content">
+            <a href="#hero" data-num="01">Início</a>
+            <a href="#about" data-num="02">Sobre</a>
+            <a href="#services" data-num="03">Serviços</a>
+            <a href="#testimonials" data-num="04">Depoimentos</a>
+            <a href="#gallery" data-num="05">Galeria</a>
+            <a href="#contact" data-num="06">Contato</a>
+        </div>
+    </div>
+
+    <!-- Hero -->
+    <section class="hero" id="hero">
+        <div class="hero-bg-text">ANDRUCCI</div>
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">
+                    <span class="line"><span>A massagem</span></span>
+                    <span class="line"><span class="italic">que transforma</span></span>
+                    <span class="line"><span>seu corpo.</span></span>
+                </h1>
+            </div>
+            <div class="hero-side">
+                <div class="hero-image">
+                    <img src="image/andre.png" alt="Andre Andrucci">
+                </div>
+                <div class="hero-meta">
+                    <div class="hero-meta-item">
+                        <div class="label">Especialidade</div>
+                        <div class="value">Estética & Fitness</div>
+                    </div>
+                    <div class="hero-meta-item">
+                        <div class="label">Local</div>
+                        <div class="value">São Paulo</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span>Scroll</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- Marquee -->
+    <div class="marquee">
+        <div class="marquee-track">
+            <div class="marquee-item">Definição Muscular <span class="dot"></span></div>
+            <div class="marquee-item">Desenho Abdominal <span class="dot"></span></div>
+            <div class="marquee-item">Performance <span class="dot"></span></div>
+            <div class="marquee-item">Recuperação <span class="dot"></span></div>
+            <div class="marquee-item">Bem-estar <span class="dot"></span></div>
+            <div class="marquee-item">Resultados <span class="dot"></span></div>
+            <div class="marquee-item">Definição Muscular <span class="dot"></span></div>
+            <div class="marquee-item">Desenho Abdominal <span class="dot"></span></div>
+        </div>
+    </div>
+
+    <!-- Sobre -->
+    <section class="about" id="about">
+        <div class="about-grid">
+            <div class="about-visual reveal">
+                <div class="about-number">01</div>
+                <div class="about-label">Sobre o Profissional</div>
+                <h2 class="about-title">
+                    Excelência em <span class="italic">cada toque</span>
+                </h2>
+            </div>
+            <div class="about-content reveal">
+                <p class="about-text">
+                    Andre Andrucci é especialista em massagem estética e fitness, combinando conhecimento anatômico profundo com técnicas avançadas para entregar resultados que vão muito além do relaxamento.
+                </p>
+                <p class="about-text">
+                    Cada sessão é personalizada para o objetivo do cliente — seja definição muscular, recuperação pós-treino, alívio de tensões ou simplesmente mais bem-estar e confiança no próprio corpo.
+                </p>
+                <div class="about-signature">
+                    <div>
+                        <div class="signature-name">Andre Andrucci</div>
+                        <div class="signature-role">Especialista em Massagem Estética & Fitness</div>
+                    </div>
+                    <img src="image/logo.png" alt="Logo" style="width: 80px; height: 80px; object-fit: contain;">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Serviços -->
+    <section class="services" id="services">
+        <div class="services-header">
+            <div class="reveal">
+                <div class="about-label">Nossos Serviços</div>
+                <h2 class="services-title">
+                    Resultados que <span class="italic">se sentem</span>
+                </h2>
+            </div>
+            <p class="services-subtitle reveal">
+                Técnicas especializadas para cada objetivo do seu corpo. Clique em cada serviço para saber mais.
+            </p>
+        </div>
+
+        <div class="services-list">
+            <div class="service-item reveal">
+                <div class="service-header">
+                    <div class="service-num">01</div>
+                    <div class="service-name">Definição Muscular</div>
+                    <div class="service-icon"><i class="fas fa-dumbbell"></i></div>
+                </div>
+                <div class="service-desc">
+                    <p>Realça o contorno e destaca o desenho muscular, potencializando os resultados da sua rotina de treinos.</p>
+                </div>
+            </div>
+            <div class="service-item reveal">
+                <div class="service-header">
+                    <div class="service-num">02</div>
+                    <div class="service-name">Desenho Abdominal</div>
+                    <div class="service-icon"><i class="fas fa-fire"></i></div>
+                </div>
+                <div class="service-desc">
+                    <p>Técnicas específicas que valorizam a região abdominal, realçando a definição e o contorno do core.</p>
+                </div>
+            </div>
+            <div class="service-item reveal">
+                <div class="service-header">
+                    <div class="service-num">03</div>
+                    <div class="service-name">Performance e Força</div>
+                    <div class="service-icon"><i class="fas fa-bolt"></i></div>
+                </div>
+                <div class="service-desc">
+                    <p>Mais rendimento nos treinos e melhores resultados. Prepare seu corpo para atingir o próximo nível.</p>
+                </div>
+            </div>
+            <div class="service-item reveal">
+                <div class="service-header">
+                    <div class="service-num">04</div>
+                    <div class="service-name">Recuperação Inteligente</div>
+                    <div class="service-icon"><i class="fas fa-heart-pulse"></i></div>
+                </div>
+                <div class="service-desc">
+                    <p>Alivia tensões, reduz dores musculares e acelera a recuperação pós-treino de forma eficiente.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Números -->
+    <section class="numbers">
+        <div class="numbers-grid">
+            <div class="number-item reveal">
+                <div class="number-value" data-target="500">0</div>
+                <div class="number-label">Clientes Atendidos</div>
+            </div>
+            <div class="number-item reveal">
+                <div class="number-value" data-target="8">0</div>
+                <div class="number-label">Anos de Experiência</div>
+            </div>
+            <div class="number-item reveal">
+                <div class="number-value" data-target="98">0</div>
+                <div class="number-label">% Satisfação</div>
+            </div>
+            <div class="number-item reveal">
+                <div class="number-value" data-target="15">0</div>
+                <div class="number-label">Técnicas Exclusivas</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filosofia -->
+    <section class="philosophy" id="philosophy">
+        <div class="philosophy-content reveal">
+            <div class="about-label" style="justify-content: center;">Nossa Filosofia</div>
+            <p class="philosophy-quote">
+                "Seu corpo é seu <span class="highlight">projeto</span>.<br>
+                A gente te ajuda a <span class="highlight">esculpir</span>."
+            </p>
+            <div class="pillars">
+                <div class="pillar reveal">
+                    <div class="pillar-num">01</div>
+                    <div class="pillar-name">Foco</div>
+                    <div class="pillar-desc">Direcionamento claro</div>
+                </div>
+                <div class="pillar reveal">
+                    <div class="pillar-num">02</div>
+                    <div class="pillar-name">Disciplina</div>
+                    <div class="pillar-desc">Compromisso com o processo</div>
+                </div>
+                <div class="pillar reveal">
+                    <div class="pillar-num">03</div>
+                    <div class="pillar-name">Consistência</div>
+                    <div class="pillar-desc">Regularidade que transforma</div>
+                </div>
+                <div class="pillar reveal">
+                    <div class="pillar-num">∞</div>
+                    <div class="pillar-name">Resultados</div>
+                    <div class="pillar-desc">Conquistas que falam por si</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Depoimentos -->
+    <section class="testimonials" id="testimonials">
+        <div class="gallery-header reveal">
+            <div class="about-label" style="justify-content: center;">Depoimentos</div>
+            <h2 class="gallery-title">
+                O que dizem sobre <span class="italic">nossos resultados</span>
+            </h2>
+        </div>
+        
+        <div class="testimonials-grid">
+            <div class="testimonial-card reveal">
+                <div class="testimonial-stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <p class="testimonial-text">"A massagem do Andre mudou minha recuperação pós-treino. Em poucas semanas, senti uma diferença enorme na definição muscular e na redução de dores."</p>
+                <div class="testimonial-author">
+                    <h4>Carlos Mendes</h4>
+                    <span>Atleta Amador / Cliente há 1 ano</span>
+                </div>
+            </div>
+
+            <div class="testimonial-card reveal">
+                <div class="testimonial-stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <p class="testimonial-text">"Profissionalismo impecável. O ambiente é incrível e as técnicas de desenho abdominal realmente funcionam. Me sinto muito mais confiante com meu corpo."</p>
+                <div class="testimonial-author">
+                    <h4>Fernanda Lima</h4>
+                    <span>Empresária / Cliente há 6 meses</span>
+                </div>
+            </div>
+
+            <div class="testimonial-card reveal">
+                <div class="testimonial-stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <p class="testimonial-text">"Eu tinha muitas dores nas costas por causa do trabalho. O Andre não só aliviou a tensão, como me ensinou a manter a postura. Recomendo de olhos fechados."</p>
+                <div class="testimonial-author">
+                    <h4>Ricardo Souza</h4>
+                    <span>Advogado / Cliente há 2 anos</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Galeria -->
+    <section class="gallery" id="gallery">
+        <div class="gallery-header reveal">
+            <div class="about-label" style="justify-content: center;">Galeria</div>
+            <h2 class="gallery-title">
+                Momentos de <span class="italic">transformação</span>
+            </h2>
+        </div>
+        <div class="gallery-grid">
+            <div class="gallery-item reveal">
+                <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600" alt="Sessão 1">
+                <div class="gallery-item-overlay">
+                    <div class="gallery-item-title">Definição</div>
+                </div>
+            </div>
+            <div class="gallery-item reveal">
+                <img src="https://images.unsplash.com/photo-1519823551278-64ac92734fb1?w=600" alt="Sessão 2">
+                <div class="gallery-item-overlay">
+                    <div class="gallery-item-title">Recuperação</div>
+                </div>
+            </div>
+            <div class="gallery-item reveal">
+                <img src="https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=600" alt="Sessão 3">
+                <div class="gallery-item-overlay">
+                    <div class="gallery-item-title">Performance</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+        <div class="cta-bg-logo">
+            <img src="image/logo.png" alt="">
+        </div>
+        <div class="cta-content reveal">
+            <div class="about-label" style="justify-content: center;">Pronto para começar?</div>
+            <h2 class="cta-title">
+                Transforme seu corpo com quem <span class="italic">entende</span> do assunto
+            </h2>
+            <a href="#contact" class="cta-btn">
+                Agendar Sessão <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- Contato -->
+    <section class="contact" id="contact">
+        <div class="contact-grid">
+            <div class="contact-info reveal">
+                <div class="about-label">Contato</div>
+                <h2>
+                    Vamos <span class="italic">conversar</span> sobre seus objetivos?
+                </h2>
+                <p>
+                    Entre em contato para agendar sua sessão ou tirar dúvidas. Atendimento personalizado e horário flexível para se encaixar na sua rotina.
+                </p>
+
+                <div class="contact-methods">
+                    <a href="https://wa.me/5511999999999" class="contact-method">
+                        <div class="contact-method-icon"><i class="fab fa-whatsapp"></i></div>
+                        <div class="contact-method-info">
+                            <div class="contact-method-label">WhatsApp</div>
+                            <div class="contact-method-value">+55 (11) 99999-9999</div>
+                        </div>
+                    </a>
+                    <a href="mailto:contato@andrucci.com" class="contact-method">
+                        <div class="contact-method-icon"><i class="fas fa-envelope"></i></div>
+                        <div class="contact-method-info">
+                            <div class="contact-method-label">E-mail</div>
+                            <div class="contact-method-value">contato@andrucci.com</div>
+                        </div>
+                    </a>
+                    <a href="#" class="contact-method">
+                        <div class="contact-method-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        <div class="contact-method-info">
+                            <div class="contact-method-label">Localização</div>
+                            <div class="contact-method-value">São Paulo - SP</div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="contact-social">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-tiktok"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                </div>
+            </div>
+
+            <div class="contact-form reveal">
+                <h3 class="form-title">Agende sua sessão</h3>
+                <form id="contact-form">
+                    <div class="form-group">
+                        <label for="name">Nome completo</label>
+                        <input type="text" id="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">WhatsApp</label>
+                        <input type="tel" id="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="service">Objetivo</label>
+                        <select id="service" required>
+                            <option value="">Selecione seu objetivo</option>
+                            <option value="definicao">Definição Muscular</option>
+                            <option value="abdominal">Desenho Abdominal</option>
+                            <option value="performance">Performance e Força</option>
+                            <option value="recuperacao">Recuperação Inteligente</option>
+                            <option value="bem-estar">Bem-estar e Confiança</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Conte sobre você</label>
+                        <textarea id="message" rows="3" placeholder="Seus objetivos, rotina de treinos..."></textarea>
+                    </div>
+                    <button type="submit" class="form-submit">
+                        Solicitar Agendamento <i class="fas fa-arrow-right"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-big-text">ANDRE ANDRUCCI</div>
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="footer-logo">
+                    <img src="image/logo.png" alt="Logo Andre Andrucci" class="footer-logo-img">
+                    <div class="footer-logo-text">Andre Andrucci</div>
+                </div>
+                <p>Especialista em massagem estética e fitness. Transformando corpos e resultados com técnica, foco e dedicação.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Navegação</h4>
+                <a href="#hero">Início</a>
+                <a href="#about">Sobre</a>
+                <a href="#services">Serviços</a>
+                <a href="#testimonials">Depoimentos</a>
+            </div>
+            <div class="footer-col">
+                <h4>Serviços</h4>
+                <a href="#">Definição</a>
+                <a href="#">Abdominal</a>
+                <a href="#">Performance</a>
+                <a href="#">Recuperação</a>
+            </div>
+            <div class="footer-col">
+                <h4>Contato</h4>
+                <a href="https://wa.me/5511999999999">+55 (11) 99999-9999</a>
+                <a href="mailto:contato@andrucci.com">contato@andrucci.com</a>
+                <a href="#">São Paulo - SP</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Andre Andrucci. Todos os direitos reservados.</p>
+            <p class="footer-tagline">"Seu corpo é seu projeto."</p>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Float -->
+    <a href="https://wa.me/5511999999999" class="whatsapp-float" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script>
+        // ============================================
+        // LOADER
+        // ============================================
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 2500);
+        });
+
+        // ============================================
+        // CURSOR PERSONALIZADO
+        // ============================================
+        const cursor = document.getElementById('cursor');
+        const cursorRing = document.getElementById('cursor-ring');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            cursorRing.style.left = e.clientX + 'px';
+            cursorRing.style.top = e.clientY + 'px';
+        });
+
+        document.querySelectorAll('a, button, .service-item, .gallery-item, .pillar, .contact-method, .testimonial-card').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.classList.add('hover');
+                cursorRing.classList.add('hover');
+            });
+            el.addEventListener('mouseleave', () => {
+                cursor.classList.remove('hover');
+                cursorRing.classList.remove('hover');
+            });
+        });
+
+        // ============================================
+        // MENU - CORRIGIDO (ABRE E FECHA)
+        // ============================================
+        const menuToggle = document.getElementById('menu-toggle');
+        const menuFull = document.getElementById('menu-full');
+        const menuClose = document.getElementById('menu-close');
+        const body = document.body;
+
+        // Função única para abrir/fechar
+        function toggleMenu() {
+            menuFull.classList.toggle('active');
+            body.classList.toggle('menu-open');
+        }
+
+        // Botão hamburguer (abre E fecha)
+        menuToggle.addEventListener('click', toggleMenu);
+
+        // Botão X de fechar
+        menuClose.addEventListener('click', toggleMenu);
+
+        // Fechar ao clicar em um link do menu
+        document.querySelectorAll('.menu-full a').forEach(link => {
+            link.addEventListener('click', () => {
+                menuFull.classList.remove('active');
+                body.classList.remove('menu-open');
+            });
+        });
+
+        // Fechar ao pressionar ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && menuFull.classList.contains('active')) {
+                menuFull.classList.remove('active');
+                body.classList.remove('menu-open');
+            }
+        });
+
+        // Fechar ao clicar fora do conteúdo (no fundo escuro)
+        menuFull.addEventListener('click', (e) => {
+            if (e.target === menuFull) {
+                menuFull.classList.remove('active');
+                body.classList.remove('menu-open');
+            }
+        });
+
+        // ============================================
+        // SCROLL REVEAL
+        // ============================================
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // ============================================
+        // SERVICES ACCORDION
+        // ============================================
+        document.querySelectorAll('.service-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+                document.querySelectorAll('.service-item').forEach(i => i.classList.remove('active'));
+                if (!isActive) item.classList.add('active');
+            });
+        });
+
+        // ============================================
+        // NUMBERS COUNTER
+        // ============================================
+        const animateNumbers = () => {
+            document.querySelectorAll('.number-value').forEach(num => {
+                const target = parseInt(num.dataset.target);
+                let current = 0;
+                const increment = target / 60;
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        num.textContent = target + (target === 98 ? '%' : '+');
+                        clearInterval(timer);
+                    } else {
+                        num.textContent = Math.floor(current);
+                    }
+                }, 30);
+            });
+        };
+
+        const numbersSection = document.querySelector('.numbers');
+        const numbersObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateNumbers();
+                    numbersObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        numbersObserver.observe(numbersSection);
+
+        // ============================================
+        // NAV SIDE ACTIVE STATE
+        // ============================================
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-side a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 300) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').slice(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // ============================================
+        // CONTACT FORM
+        // ============================================
+        document.getElementById('contact-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const service = document.getElementById('service').value;
+            const message = document.getElementById('message').value;
+            const text = `Olá Andre! Me chamo ${name}. Tenho interesse em ${service}. ${message}`;
+            window.open(`https://wa.me/5511999999999?text=${encodeURIComponent(text)}`, '_blank');
+        });
+
+        // ============================================
+        // SMOOTH SCROLL
+        // ============================================
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        console.log('💆 Andre Andrucci - Site carregado!');
+    </script>
+
+</body>
+</html>
